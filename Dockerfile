@@ -20,10 +20,10 @@ RUN set -x \
 		pcre-dev \
 		readline-dev \
 		tar \
-		zlib-dev 
-	
+		zlib-dev
+
 # install HAProxy
-	
+
 RUN wget -O haproxy.tar.gz "https://www.haproxy.org/download/${HAPROXY_MAJOR}/src/haproxy-${HAPROXY_VERSION}.tar.gz" \
 	&& echo "$HAPROXY_MD5 *haproxy.tar.gz" | md5sum -c \
 	&& mkdir -p /usr/src/haproxy \
@@ -51,9 +51,9 @@ RUN wget -O haproxy.tar.gz "https://www.haproxy.org/download/${HAPROXY_MAJOR}/sr
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)" \
 	&& apk add --virtual .haproxy-rundeps $runDeps \
-	&& apk del .build-deps 
+	&& apk del .build-deps
 
-COPY docker-entrypoint.sh /
+COPY ./docker-entrypoint.sh /
 ADD ./haproxy.cfg /usr/local/etc/haproxy/
 RUN chmod 755 /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
